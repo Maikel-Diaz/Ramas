@@ -86,8 +86,34 @@ public class AnalizadorAccesosAServidor
     
     public String clienteConMasAccesosExitosos()
     {
-        return "";
+        String direccionIPDelCliente = null;
+        HashSet<Acceso> conjuntoDeAccesos = new HashSet<>();
+        int numeroVecesMasAlto = 0;
+        int direccionIPMasAlta = 0;
+        for(Acceso acceso : accesos) {
+            conjuntoDeAccesos.add(acceso);
+        }
+        
+        for(Acceso acceso1 : conjuntoDeAccesos) {
+            int numeroVecesRepite = 0;
+            for(Acceso acceso2 : accesos) {
+                if(acceso1.getDireccionIP().equals(acceso2.getDireccionIP()) && Integer.parseInt(acceso2.getCodigo().substring(0, 1)) != 4) {
+                    numeroVecesRepite += 1;
+                }
+            }
+            String[] direccionIPSeparada = acceso1.getDireccionIP().replace(".", " ").split(" ");
+            if(numeroVecesRepite > numeroVecesMasAlto) {
+                numeroVecesMasAlto = numeroVecesRepite;
+                direccionIPDelCliente = acceso1.getDireccionIP();
+                direccionIPMasAlta = Integer.parseInt(direccionIPSeparada[3]);
+            }
+            else if (numeroVecesRepite == numeroVecesMasAlto && direccionIPMasAlta < Integer.parseInt(direccionIPSeparada[3])) {
+                direccionIPDelCliente = acceso1.getDireccionIP();                
+            }
+        }
+        if(direccionIPDelCliente == null) {
+            System.out.println("No hay datos introducidos");
+        }
+        return direccionIPDelCliente;
     }
-
-
 }
