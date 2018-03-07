@@ -30,8 +30,7 @@ public class AnalizadorAccesosAServidor
             System.out.println("Ocurrio algun error al leer el archivo.");
         }
     }
-    
-    
+       
     public int obtenerHoraMasAccesos() 
     {
         int valorADevolver = -1;
@@ -59,11 +58,30 @@ public class AnalizadorAccesosAServidor
         return valorADevolver;
     }
 
-    
-    
     public String paginaWebMasSolicitada() 
     {
-        return "";
+        String paginaWebMasSolicitada = null;
+        HashSet<String> paginasWeb = new HashSet<>();
+        for(Acceso acceso : accesos) {
+            paginasWeb.add(acceso.getPaginaWeb());
+        }
+        int numeroVecesMasAlto = 0;
+        for(String paginaWeb : paginasWeb) {
+            int numeroVecesRepite = 0;
+            for(Acceso acceso : accesos) {
+                if(acceso.getPaginaWeb().equals(paginaWeb)) {
+                    numeroVecesRepite += 1;
+                }
+            }
+            if(numeroVecesRepite > numeroVecesMasAlto) {
+                numeroVecesMasAlto = numeroVecesRepite;
+                paginaWebMasSolicitada = paginaWeb;
+            }
+        }
+        if(paginaWebMasSolicitada == null) {
+            System.out.println("No hay datos introducidos");
+        }
+        return paginaWebMasSolicitada;
     }
     
     public String clienteConMasAccesosExitosos()
